@@ -1,0 +1,84 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop Gamer ASUS ROG",
+      "description": "Laptop para gaming con RTX 4060, 16GB RAM, 1TB SSD",
+      "price": 1299.99,
+      "avatar": "/images/laptop-gamer.jpg",
+      "specs": {
+        "processor": "Intel i7-13700H",
+        "ram": "16GB DDR5",
+        "storage": "1TB NVMe SSD",
+        "gpu": "RTX 4060 8GB",
+        "display": "15.6\" FHD 144Hz"
+      },
+      "category": "laptops",
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.7
+    },
+    {
+      "id": 2,
+      "name": "Teclado Mecánico RGB",
+      "description": "Teclado mecánico con switches azules y retroiluminación RGB",
+      "price": 89.99,
+      "avatar": "/images/teclado-mecanico.jpg",
+      "specs": {
+        "tipo": "Mecánico",
+        "switches": "Blue",
+        "conectividad": "USB-C",
+        "retroiluminacion": "RGB"
+      },
+      "category": "perifericos",
+      "inStock": true,
+      "brand": "Redragon",
+      "rating": 4.3
+    },
+    {
+      "id": 3,
+      "name": "Monitor 27\" 4K",
+      "description": "Monitor 4K UHD con HDR10 y frecuencia de 144Hz",
+      "price": 349.99,
+      "avatar": "/images/monitor-4k.jpg",
+      "category": "monitores",
+      "specs": {
+        "tamaño": "27 pulgadas",
+        "resolucion": "3840x2160 4K",
+        "frecuencia": "144Hz",
+        "panel": "IPS",
+        "hdr": "HDR10"
+      },
+      "inStock": true,
+      "brand": "LG",
+      "rating": 4.6
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "laptops",
+      "displayName": "Laptops y Notebooks"
+    },
+    {
+      "id": 2,
+      "name": "perifericos",
+      "displayName": "Periféricos"
+    },
+    {
+      "id": 3,
+      "name": "monitores", 
+      "displayName": "Monitores"
+    },
+    {
+      "id": 4,
+      "name": "componentes",
+      "displayName": "Componentes PC"
+    },
+    {
+      "id": 5,
+      "name": "almacenamiento",
+      "displayName": "Almacenamiento"
+    }
+  ]
+}

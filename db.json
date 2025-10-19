@@ -1,0 +1,212 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop Gaming ASUS ROG",
+      "price": 915299.99,
+      "category": "laptops",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    },
+    {
+      "id": 2,
+      "name": "Teclado Mecánico Gaming",
+      "price": 89129.99,
+      "category": "perifericos",
+      "description": "Teclado mecánico RGB con switches azules",
+      "image": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=300&fit=crop",
+      "specs": {
+        "Tipo": "Mecánico",
+        "Switches": "Blue",
+        "Retroiluminación": "RGB"
+      },
+      "inStock": true,
+      "brand": "Redragon",
+      "rating": 4.5
+    },
+    {
+      "id": 3,
+      "name": "Monitor 27\" 4K UHD",
+      "price": 361129.99,
+      "category": "monitores",
+      "description": "Teclado mecánico RGB con switches azules",
+      "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+      "specs": {
+        "Tipo": "Mecánico",
+        "Switches": "Blue",
+        "Retroiluminación": "RGB"
+      },
+      "inStock": true,
+      "brand": "Redragon",
+      "rating": 4.5
+    },
+    {
+      "id": 4,
+      "name": "Monitor 24\" 4K UHD",
+      "price": 10029.99,
+      "category": "monitores",
+      "description": "Monitor LG intelligente RGB con switches azules",
+      "image": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=300&fit=crop",
+      "specs": {
+        "Tipo": "Mecánico",
+        "Switches": "Blue",
+        "Retroiluminación": "RGB"
+      },
+      "inStock": true,
+      "brand": "Redragon",
+      "rating": 4.5
+    },
+    {
+      "id": 5,
+      "name": "PC Gaming AMD Ryzen 7 5800X",
+      "price": 229999.99,
+      "category": "laptops",
+      "description": "Teclado mecánico RGB con switches azules",
+      "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+      "specs": {
+        "Tipo": "Mecánico",
+        "Switches": "Blue",
+        "Retroiluminación": "RGB"
+      },
+      "inStock": true,
+      "brand": "Redragon",
+      "rating": 4.5
+    },
+    
+       {
+      "id": 6,
+      "name": "Laptop Gaming ASUS ROG",
+      "price": 1599.99,
+      "category": "laptops",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    },
+       {
+      "id": 7,
+      "name": "Laptop Gaming ASUS ROG",
+      "price": 71599.99,
+      "category": "laptops",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    },
+    
+       {
+      "id": 8,
+      "name": "Laptop Gaming ASUS ROG",
+      "price":41599.99,
+      "category": "laptops",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    },
+    {
+      "id": 9,
+      "name": "Almacenamiento Gaming ASUS ROG",
+      "price": 66599.99,
+      "category": "Almacenamiento",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    },
+    {
+      "id": 10,
+      "name": "Periferico Gaming ASUS ROG",
+      "price": 89599.99,
+      "category": "perifericos",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    },
+    {
+      "id": 11,
+      "name": " Gaming ASUS ROG",
+      "price": 1599.99,
+      "category": "laptops",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    },
+    {
+      "id": 12,
+      "name": "Monitor HP Gaming ASUS ROG",
+      "price": 75599.99,
+      "category": "monitores",
+      "description": "Laptop para gaming con RTX 4070, 32GB RAM, 1TB SSD",
+      "image": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=300&fit=crop",
+      "specs": {
+        "Procesador": "Intel i9-13900H",
+        "RAM": "32GB DDR5",
+        "Almacenamiento": "1TB SSD NVMe",
+        "GPU": "RTX 4070 8GB"
+      },
+      "inStock": true,
+      "brand": "ASUS",
+      "rating": 4.8
+    }
+  ],
+  "categories": [
+    { "id": 1, "name": "laptops", "displayName": "Laptops" },
+    { "id": 2, "name": "perifericos", "displayName": "Periféricos" },
+    { "id": 3, "name": "monitores", "displayName": "Monitores" },
+    { "id": 4, "name": "componentes", "displayName": "Componentes" }
+  ]
+}
