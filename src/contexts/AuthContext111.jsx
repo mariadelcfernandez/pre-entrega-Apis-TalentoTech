@@ -1,8 +1,12 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
+const irPagar =() => {
+  navigate('/pay', {state: { card: ubication.state.card} });  
+}
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -11,6 +15,8 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+ 
 
   // Configurar axios para incluir token en todas las peticiones
   useEffect(() => {
@@ -26,6 +32,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = async () => {
     try {
+     // const response = await axios.get('http://localhost:5000/api/auth/me');
       const response = await axios.get('http://localhost:5000/api/auth/me');
       setUser(response.data);
     } catch (error) {

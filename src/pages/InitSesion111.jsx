@@ -2,9 +2,11 @@ import react, { useState } from 'react'
 import products from './Products';
 import { useNavigate, Route, useLocation } from 'react-router-dom'
 
+import { useAuth } from '../contexts/AuthContext111';
+
 export default function InitSesion({setAutenticated, setUser}) {
     const Navigate = useNavigate();
-    const ubication = useLocation();
+    const location = useLocation();
     const [form, setForm] = useState({name: '', email: ''});
 
     //Manejar sesion, si inicio la sesion.
@@ -14,8 +16,8 @@ export default function InitSesion({setAutenticated, setUser}) {
             setAutenticated(true);
             setUser(form);
         // Si viene por el lado del card
-          if (ubication.state?.card) {
-            Navigate('/pay', {state: { card: ubication.state.card} });
+          if (location.state?.card) {
+            Navigate('/pay', {state: { card: location.state.card} });
           } else {
             Navigate('/products');
           }       

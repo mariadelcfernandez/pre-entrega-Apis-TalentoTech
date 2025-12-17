@@ -1,53 +1,166 @@
 // src/components/Pagination.jsx
 import React from 'react';
+import styled from 'styled-components';
+import { FaAngleLeft, FaAngleRight, FaAngleDoubleLeft, FaAngleDoubleRight } from 'react-icons/fa';
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-  const pages = [];
+const PaginationContainer = styled.nav`
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+`;
 
-  // Calcular páginas a mostrar (máximo 5 páginas)
-  let startPage = Math.max(1, currentPage - 2);
-  let endPage = Math.min(totalPages, startPage + 4);
-
-  if (endPage - startPage < 4) {
-    startPage = Math.max(1, endPage - 4);
+const PageButton = styled.button`
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dee2e6;
+  background: ${props => props.active ? '#667eea' : 'white'};
+  color: ${props => props.active ? 'white' : '#667eea'};
+  border-radius: 5px;
+  font-weight: ${props => props.active ? '600' : '400'};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background: ${props => props.active ? '#5a6fd8' : '#f8f9fa'};
+    border-color: #667eea;
+    transform: translateY(-2px);
   }
-
-  for (let i = startPage; i <= endPage; i++) {
-    pages.push(i);
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
+  
+  &.ellipsis {
+    border: none;
+    background: transparent;
+    cursor: default;
+    
+    &:hover {
+      background: transparent;
+      transform: none;
+    }
+  }
+`;
+
+const PaginationInfo = styled.div`
+  margin-left: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  
+  strong {
+    color: #333;
+  }
+`;
+
+const Pagination = ({ 
+  currentPage, 
+  totalPages, 
+  onPageChange,
+  totalItems,
+  itemsPerPage = 12
+}) => {
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisible = 5;
+    
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+      return pages;
+    }
+    
+    let start = Math.max(2, currentPage - 1);
+    let end = Math.min(totalPages - 1, currentPage + 1);
+    
+    if (currentPage <= 3) {
+      start = 2;
+      end = 4;
+    }
+    
+    if (currentPage >= totalPages - 2) {
+      start = totalPages - 3;
+      end = totalPages - 1;
+    }
+    
+    pages.push(1);
+    
+    if (start > 2) pages.push('...');
+    
+    for (let i = start; i <= end; i++) pages.push(i);
+    
+    if (end < totalPages - 1) pages.push('...');
+    
+    pages.push(totalPages);
+    
+    return pages;
+  };
+
+  const startItem = (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <nav aria-label="Page navigation">
-      <ul className="pagination justify-content-center">
-        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-          <button
-            className="page-link"
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Anterior
-          </button>
-        </li>
-
-        {pages.map(page => (
-          <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
-            <button className="page-link" onClick={() => onPageChange(page)}>
+    <div>
+      <PaginationInfo className="mb-3">
+        Mostrando <strong>{startItem}-{endItem}</strong> de <strong>{totalItems}</strong> productos
+      </PaginationInfo>
+      
+      <PaginationContainer>
+        <PageButton
+          onClick={() => onPageChange(1)}
+          disabled={currentPage === 1}
+          title="Primera página"
+        >
+          <FaAngleDoubleLeft />
+        </PageButton>
+        
+        <PageButton
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          title="Página anterior"
+        >
+          <FaAngleLeft />
+        </PageButton>
+        
+        {getPageNumbers().map((page, index) => (
+          page === '...' ? (
+            <PageButton key={`ellipsis-${index}`} className="ellipsis" disabled>
+              ...
+            </PageButton>
+          ) : (
+            <PageButton
+              key={page}
+              onClick={() => onPageChange(page)}
+              active={currentPage === page}
+              title={`Página ${page}`}
+            >
               {page}
-            </button>
-          </li>
+            </PageButton>
+          )
         ))}
-
-        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-          <button
-            className="page-link"
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Siguiente
-          </button>
-        </li>
-      </ul>
-    </nav>
+        
+        <PageButton
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          title="Página siguiente"
+        >
+          <FaAngleRight />
+        </PageButton>
+        
+        <PageButton
+          onClick={() => onPageChange(totalPages)}
+          disabled={currentPage === totalPages}
+          title="Última página"
+        >
+          <FaAngleDoubleRight />
+        </PageButton>
+      </PaginationContainer>
+    </div>
   );
 };
 

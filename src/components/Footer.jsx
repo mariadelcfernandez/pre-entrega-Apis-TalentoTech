@@ -1,248 +1,408 @@
 // src/components/Footer.jsx
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Nosotros from '../pages/Nosotros';
-
+import Logo from '../assets/Logo.jpeg';
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaYoutube,
+  FaCcVisa,
+  FaCcMastercard,
+  FaCcPaypal,
+  FaCcApplePay,
+  FaShieldAlt,
+  FaTruck,
+  FaUndo,
+  FaHeadset,
+  
+} from 'react-icons/fa';
 
 const FooterContainer = styled.footer`
-  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
   color: white;
-  padding: 3rem 0 1rem;
+  padding: 4rem 0 2rem;
   margin-top: auto;
 `;
 
 const FooterSection = styled.div`
-  h5 {s
-    color: #3498db;
-    margin-bottom: 1rem;
-    font-weight: 600;
+  margin-bottom: 2rem;
+`;
+
+const FooterTitle = styled.h5`
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: #ffd700;
   }
 `;
 
-const FooterLink = styled(Link)`
+const FooterLinks = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const FooterLink = styled.li`
+  margin-bottom: 0.75rem;
+`;
+
+const FooterLinkItem = styled(Link)`
   color: #bdc3c7;
   text-decoration: none;
-  transition: color 0.3s;
-  display: block;
-  margin-bottom: 0.5rem;
-
-  &:hover {
-    color: #3498db;
-  }
-`;
-
-const ExternalLink = styled.a`
-  color: #bdc3c7;
-  text-decoration: none;
-  transition: color 0.3s;
-  display: block;
-  margin-bottom: 0.5rem;
-
-  &:hover {
-    color: #3498db;
-  }
-`;
-
-const SocialIcon = styled.a`
-  display: inline-flex;
+  transition: all 0.3s ease;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
+  
+  &:hover {
+    color: white;
+    padding-left: 5px;
+  }
+`;
+
+const SocialLinks = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+`;
+
+const SocialLink = styled.a`
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
-  transition: all 0.3s;
-  margin-right: 0.5rem;
-
+  text-decoration: none;
+  transition: all 0.3s ease;
+  
   &:hover {
-    background: #3498db;
+    background: ${props => props.color || '#667eea'};
     transform: translateY(-3px);
   }
 `;
 
-const ContactInfo = styled.div`
+const FeatureItem = styled.div`
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-  
-  i {
-    margin-right: 10px;
-    color: #3498db;
-    width: 20px;
-  }
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 `;
 
-const NewsletterForm = styled.form`
+const FeatureIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
-  margin-top: 1rem;
-
-  input {
-    flex: 1;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px 0 0 4px;
-  }
-
-  button {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    transition: background 0.3s;
-
-    &:hover {
-      background: #2980b9;
-    }
-  }
-`;
-
-const FooterBottom = styled.div`
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1.5rem;
-  margin-top: 2rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
 `;
 
 const PaymentMethods = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 0.5rem;
+  flex-wrap: wrap;
   margin-top: 1rem;
+`;
+
+const PaymentIcon = styled.div`
+  background: white;
+  width: 40px;
+  height: 25px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 1.5rem;
+`;
+
+const Copyright = styled.div`
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #95a5a6;
+  font-size: 0.9rem;
+`;
+
+const NewsletterForm = styled.form`
+  display: flex;
+  gap: 0.5rem;
   
-  span {
+  input {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
     background: rgba(255, 255, 255, 0.1);
-    padding: 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
+    color: white;
+    
+    &::placeholder {
+      color: #bdc3c7;
+    }
+    
+    &:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+  button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      opacity: 0.9;
+    }
   }
 `;
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    alert(`¡Gracias por suscribirte con el email: ${email}!`);
-    e.target.reset();
+    // Lógica para suscripción
+    alert('¡Gracias por suscribirte!');
   };
 
   return (
     <FooterContainer>
       <div className="container">
         <div className="row">
-          {/* Columna 1: Información de la empresa */}
+          {/* Información de la empresa */}
           <div className="col-lg-4 col-md-6 mb-4">
             <FooterSection>
-              <h5>🛍️ Tecnoya. Tecnologia e Informática</h5>
-              <p className="text-muted">
-                Tu tienda de confianza para productos tecnológicos. Ofrecemos los mejores precios y calidad en laptops, componentes y periféricos.
+              {<img src={Logo} alt="Mi Logo" style={{ width: '50px' }} />}
+              
+            
+              <p style={{ color: '#bdc3c7', lineHeight: '1.6' }}>
+                Tu tienda online de confianza. Ofrecemos los mejores productos 
+                con calidad garantizada y envío a todo el país.
               </p>
-              <div className="d-flex mt-3">
-                <SocialIcon href="#" title="Facebook">
-                  <i className="fab fa-facebook-f"></i>
-                </SocialIcon>
-                <SocialIcon href="#" title="Twitter">
-                  <i className="fab fa-twitter"></i>
-                </SocialIcon>
-                <SocialIcon href="#" title="Instagram">
-                  <i className="fab fa-instagram"></i>
-                </SocialIcon>
-                <SocialIcon href="#" title="LinkedIn">
-                  <i className="fab fa-linkedin-in"></i>
-                </SocialIcon>
-              </div>
+              
+              <SocialLinks>
+                <SocialLink href="#" color="#3b5998">
+                  <FaFacebook />
+                </SocialLink>
+                <SocialLink href="#" color="#1da1f2">
+                  <FaTwitter />
+                </SocialLink>
+                <SocialLink href="#" color="#e1306c">
+                  <FaInstagram />
+                </SocialLink>
+                <SocialLink href="#" color="#0077b5">
+                  <FaLinkedin />
+                </SocialLink>
+                <SocialLink href="#" color="#ff0000">
+                  <FaYoutube />
+                </SocialLink>
+              </SocialLinks>
             </FooterSection>
           </div>
 
-          {/* Columna 2: Enlaces rápidos */}
+          {/* Enlaces rápidos */}
           <div className="col-lg-2 col-md-6 mb-4">
             <FooterSection>
-              <h5>Enlaces Rápidos</h5>
-              <FooterLink to="/">Inicio</FooterLink>
-              <FooterLink to="/products">Productos</FooterLink>
-              <FooterLink to="../pages/Nosotros">Nosotros</FooterLink>
-              <FooterLink to="/contact">Contacto</FooterLink>
-              <FooterLink to="/support">Servicios</FooterLink>
+              <FooterTitle>Enlaces Rápidos</FooterTitle>
+              <FooterLinks>
+                <FooterLink>
+                  <FooterLinkItem to="/">
+                    Inicio
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/productos">
+                    Productos
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/ofertas">
+                    Ofertas
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/nosotros">
+                    Sobre Nosotros
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/contacto">
+                    Contacto
+                  </FooterLinkItem>
+                </FooterLink>
+              </FooterLinks>
             </FooterSection>
           </div>
 
-          {/* Columna 3: Categorías */}
+          {/* Categorías */}
           <div className="col-lg-2 col-md-6 mb-4">
             <FooterSection>
-              <h5>Categorías</h5>
-              <FooterLink to="/products?category=laptops">Laptops</FooterLink>
-              <FooterLink to="/products?category=monitores">Monitores</FooterLink>
-              <FooterLink to="/products?category=perifericos">Periféricos</FooterLink>
-              <FooterLink to="/products?category=componentes">Componentes</FooterLink>
-              <FooterLink to="/products?category=almacenamiento">Almacenamiento</FooterLink>
+              <FooterTitle>Categorías</FooterTitle>
+              <FooterLinks>
+                <FooterLink>
+                  <FooterLinkItem to="/productos?categoria=electronica">
+                    Electrónica
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/productos?categoria=ropa">
+                    Ropa
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/productos?categoria=hogar">
+                    Hogar
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/productos?categoria=deportes">
+                    Deportes
+                  </FooterLinkItem>
+                </FooterLink>
+                <FooterLink>
+                  <FooterLinkItem to="/productos?categoria=libros">
+                    Libros
+                  </FooterLinkItem>
+                </FooterLink>
+              </FooterLinks>
             </FooterSection>
           </div>
 
-          {/* Columna 4: Contacto y Newsletter */}
+          {/* Características */}
           <div className="col-lg-4 col-md-6 mb-4">
             <FooterSection>
-              <h5>Contacto</h5>
-              <ContactInfo>
-                <i className="fas fa-map-marker-alt"></i>
+              <FooterTitle>Por qué elegirnos</FooterTitle>
+              
+              <FeatureItem>
+                <FeatureIcon>
+                  <FaShieldAlt />
+                </FeatureIcon>
                 <div>
-                  <div>9 de Julio 1400</div>
-                  <div>Ciudad Corrientes, CP 3400</div>
+                  <h6 style={{ color: 'white', marginBottom: '0.25rem' }}>Compra Segura</h6>
+                  <p style={{ color: '#bdc3c7', fontSize: '0.875rem', margin: 0 }}>
+                    Tus datos están protegidos con encriptación SSL
+                  </p>
                 </div>
-              </ContactInfo>
+              </FeatureItem>
               
-              <ContactInfo>
-                <i className="fas fa-phone"></i>
-                <div>+54 (379) 425-1308</div>
-              </ContactInfo>
+              <FeatureItem>
+                <FeatureIcon>
+                  <FaTruck />
+                </FeatureIcon>
+                <div>
+                  <h6 style={{ color: 'white', marginBottom: '0.25rem' }}>Envío Rápido</h6>
+                  <p style={{ color: '#bdc3c7', fontSize: '0.875rem', margin: 0 }}>
+                    Entrega en 24-48 horas en toda la ciudad
+                  </p>
+                </div>
+              </FeatureItem>
               
-              <ContactInfo>
-                <i className="fas fa-envelope"></i>
-                <div>info@tecoya.com</div>
-              </ContactInfo>
-
-              <div className="mt-4">
-                <h6>Newsletter</h6>
-                <p className="text-muted small">
-                  Suscríbete para recibir ofertas y novedades
-                </p>
-                <NewsletterForm onSubmit={handleNewsletterSubmit}>
-                  <input 
-                    type="email" 
-                    name="email" 
-                    placeholder="Tu email" 
-                    required 
-                  />
-                  <button type="submit">
-                    <i className="fas fa-paper-plane"></i>
-                  </button>
-                </NewsletterForm>
-              </div>
+              <FeatureItem>
+                <FeatureIcon>
+                  <FaUndo />
+                </FeatureIcon>
+                <div>
+                  <h6 style={{ color: 'white', marginBottom: '0.25rem' }}>Devoluciones</h6>
+                  <p style={{ color: '#bdc3c7', fontSize: '0.875sterem', margin: 0 }}>
+                    30 días para devoluciones sin complicaciones
+                  </p>
+                </div>
+              </FeatureItem>
+              
+              <FeatureItem>
+                <FeatureIcon>
+                  <FaHeadset />
+                </FeatureIcon>
+                <div>
+                  <h6 style={{ color: 'white', marginBottom: '0.25rem' }}>Soporte 24/7</h6>
+                  <p style={{ color: '#bdc3c7', fontSize: '0.875rem', margin: 0 }}>
+                    Atención al cliente disponible todo el día
+                  </p>
+                </div>
+              </FeatureItem>
             </FooterSection>
           </div>
         </div>
 
-        <FooterBottom>
-          <div className="row align-items-center">
-            <div className="col-md-6">
-              <p className="text-muted mb-0">
-                &copy; {currentYear} Tecnoya- Maria Fernandez. Todos los derechos reservados-2025.
+        <div className="row mt-4">
+          {/* Newsletter */}
+          <div className="col-lg-6 mb-4">
+            <FooterSection>
+              <FooterTitle>Newsletter</FooterTitle>
+              <p style={{ color: '#bdc3c7', marginBottom: '1rem' }}>
+                Suscríbete para recibir ofertas exclusivas y novedades
               </p>
+              <NewsletterForm onSubmit={handleNewsletterSubmit}>
+                <input 
+                  type="email" 
+                  placeholder="Tu correo electrónico" 
+                  required 
+                />
+                <button type="submit">Suscribirse</button>
+              </NewsletterForm>
+            </FooterSection>
+          </div>
+
+          {/* Métodos de pago */}
+          <div className="col-lg-6 mb-4">
+            <FooterSection>
+              <FooterTitle>Métodos de Pago</FooterTitle>
+              <PaymentMethods>
+                <PaymentIcon>
+                  <FaCcVisa />
+                </PaymentIcon>
+                <PaymentIcon>
+                  <FaCcMastercard />
+                </PaymentIcon>
+                <PaymentIcon>
+                  <FaCcPaypal />
+                </PaymentIcon>
+                <PaymentIcon>
+                  <FaCcApplePay />
+                </PaymentIcon>
+              </PaymentMethods>
+            </FooterSection>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <Copyright>
+          <div className="row">
+            <div className="col-md-6 text-md-start mb-2 mb-md-0">
+              © {new Date().getFullYear()} ShopOnline. Todos los derechos reservados.
             </div>
             <div className="col-md-6 text-md-end">
-              <div className="text-muted small">
-                Métodos de pago aceptados:
-                <PaymentMethods>
-                  <span>💳 Visa</span>
-                  <span>💳 MasterCard</span>
-                  <span>💳 PayPal</span>
-                  <span>💳 Mercado Pago</span>
-                </PaymentMethods>
-              </div>
+              <Link to="/terminos" style={{ color: '#95a5a6', textDecoration: 'none', marginRight: '1rem' }}>
+                Términos y condiciones
+              </Link>
+              <Link to="/privacidad" style={{ color: '#95a5a6', textDecoration: 'none' }}>
+                Política de privacidad
+              </Link>
             </div>
           </div>
-        </FooterBottom>
+        </Copyright>
       </div>
     </FooterContainer>
   );

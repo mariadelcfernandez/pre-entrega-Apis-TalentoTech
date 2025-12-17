@@ -1,44 +1,96 @@
 // src/pages/Products.jsx
-import { useState } from 'react';
-import useProducts from '../hooks/useProducts';
-import ProductList from '../components/ProductList';
+import React from 'react';
+//import { Helmet } from 'react-helmet-async';
 import AdvancedFilters from '../components/AdvancedFilters';
+//import ProductList from '../components/ProductList';
+import SearchBar from '../components/SearchBar';
+import Pagination from '../components/Pagination';
+import { useProducts } from '../contexts/ProductsContext';
+import styled from 'styled-components';
+
+const ProductsContainer = styled.div`
+  padding: 2rem 0;
+`;
+
+const ProductsHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
+
+const ProductsTitle = styled.h1`
+  color: #333;
+  margin: 0;
+`;
 
 const Products = () => {
-  const [filters, setFilters] = useState({
-    search: '',
-    category: '',
-    minPrice: '',
-    maxPrice: '',
-    sortBy: 'newest',
-    inStock: false
-  });
+  const {
+    filteredProducts,
+    loading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    filters,
+    setFilters,
+    currentPage,
+    totalPages,
+    paginate,
+    totalItems
+  } = useProducts();
 
-  const { products, loading, error, dataSource } = useProducts(filters);
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
 
-  const handleFiltersChange = (newFilters) => {
+  const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
   };
 
   return (
-    <div className="container py-4">
-      <div className="text-center mb-5">
-        <h1>Productos de Tecnología</h1>
-        <p className="lead">Encuentra los mejores productos informáticos</p>
-      </div>
-
-      <AdvancedFilters 
-        filters={filters} 
-        onFiltersChange={handleFiltersChange} 
-      />
-
-      <ProductList 
-        products={products} 
-        loading={loading} 
-        error={error}
-        dataSource={dataSource}
-      />
-    </div>
+    <>
+      <Helmet>
+        <title>Productos | Tienda Online</title>
+        <meta name="description" content="Explora nuestro catálogo de productos. Encuentra lo que necesitas al mejor precio." />
+      </Helmet>
+      
+      <ProductsContainer>
+        <div className="container">
+          <ProductsHeader>
+            <ProductsTitle>Nuestros Productos</ProductsTitle>
+            <div style={{ width: '100%', maxWidth: '400px' }}>
+              <SearchBar
+                onSearch={handleSearch}
+                placeholder="Buscar productos..."
+                value={searchTerm}
+              />
+            </div>
+          </ProductsHeader>
+          
+          <AdvancedFilters
+            filters={filters}
+            onFiltersChange={handleFilterChange}
+          />
+          
+          <ProductList
+            products={filteredProducts}
+            loading={loading}
+            error={error}
+          />
+          
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={paginate}
+              totalItems={totalItems}
+            />
+          )}
+        </div>
+      </ProductsContainer>
+    </>
   );
 };
 

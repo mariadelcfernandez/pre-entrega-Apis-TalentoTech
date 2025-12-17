@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Products from "./Products";
 
 export default function Pay({ isAuthenticated, setIsAuthenticated, user, setUser}) {
-    const location = useLocation();
+    const useLocation = useLocation();
     const Navigate = useNavigate();
+    
     //Datos de caarito
-    const card = location.state?.card || [];
+    const card = useLocation.state?.card || [];
     //Calculo del total
     const total = card.reduce((sum, Product) => sum + Number(Product.price),0);
     // Funcion para finalizar la compra
@@ -19,4 +20,14 @@ export default function Pay({ isAuthenticated, setIsAuthenticated, user, setUser
         setIsAuthenticated(false);
         setUser({name: '',email: '' });
     };
-}
+
+    return (
+        <div>
+            <h1>Página de Pago</h1> 
+            <p>Total a pagar: ${total}</p>
+            <button onClick={buy}>Comprar</button>
+            <button onClick={logeout}>Cerrar sesion</button>
+        </div>
+    );
+
+};

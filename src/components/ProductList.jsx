@@ -1,136 +1,253 @@
 // src/components/ProductList.jsx
-import { useCart } from '../context/CartContext';
-import { Link } from 'react-router-dom';
+import { memo, useState } from 'react';
+import { useProducts } from '../contexts/ProductsContext';
+import { useAuth } from '../contexts/AuthContext';
+import ProductCard from '../components/ProductCard'; 
+import LoadingSpinner from './ui/LoadingSpinner';
+import Pagination from './Pagination';
+import styled from 'styled-components';
+import { FaFilter, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 
-const ProductList = ({ products, loading, error, dataSource }) => {
-  const { addToCart } = useCart();
+const Container = styled.div`
+  padding: 2rem 0;
+`;
 
-  // Función para obtener producto de fuente
-  const getProductOrigin = () => {
-    if (!dataSource) return null;
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
+
+const Title = styled.h1`
+  color: #333;
+  font-weight: 700;
+  margin: 0;
+`;
+
+const Controls = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+const SortSelect = styled.select`
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+`;
+
+const ViewToggle = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const ViewButton = styled.button`
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  background: ${props => props.active ? '#667eea' : 'white'};
+  color: ${props => props.active ? 'white' : '#333'};
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  &:hover {
+    border-color: #667eea;
+  }
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  
+  &.list-view {
+    grid-template-columns: 1fr;
     
-    const origin = {
-      external: { text: 'API Externa', color: 'bg-info' },
-      local: { text: 'API Local', color: 'bg-success' },
-      mock: { text: 'Datos Demo', color: 'bg-warning' }
-    };
-    
-    const source = origin[dataSource];
-    if (!source) return null;
-    
-    return (
-      <div className="text-center mb-3">
-        <span className={`badge ${source.color} text-dark`}>
-          Fuente: {source.text}
-        </span>
-      </div>
-    );
+    & > div {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+  }
+`;
+
+const EmptyState = styled.div`
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  color: white;
+  
+  h3 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  p {
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+`;
+
+const ProductList = memo(() => {
+  const { 
+    filteredProducts, 
+    loading, 
+    error, 
+    totalItems,
+    pagination,
+    setFilters,
+    filters
+  } = useProducts();
+  
+  const { isAdmin } = useAuth();
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' o 'list'
+
+  const handleSortChange = (e) => {
+    setFilters(prev => ({
+      ...prev,
+      sortBy: e.target.value,
+      page: 1 // Resetear a primera página
+    }));
   };
 
-  if (loading) {
+  const handlePageChange = (page) => {
+    setFilters(prev => ({
+      ...prev,
+      page
+    }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (loading && !filteredProducts.length) {
     return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-        <p className="mt-2 text-muted">Buscando productos disponibles...</p>
-      </div>
+      <Container>
+        <LoadingSpinner message="Cargando productos..." />
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="alert alert-warning text-center" role="alert">
-        <h5>⚠️ Aviso</h5>
-        <p className="mb-2">{error}</p>
-        <small>Los productos pueden ser de demostración</small>
-      </div>
+      <Container>
+        <EmptyState>
+          <h3>¡Ups! Algo salió mal</h3>
+          <p>{error}</p>
+          <button 
+            className="btn btn-light"
+            onClick={() => window.location.reload()}
+          >
+            Reintentar
+          </button>
+        </EmptyState>
+      </Container>
     );
   }
 
-  if (products.length === 0) {
+  if (!filteredProducts.length) {
     return (
-      <div className="text-center py-5">
-        <h5>No se encontraron productos</h5>
-        <p className="text-muted">Intenta con otros filtros de búsqueda</p>
-      </div>
+      <Container>
+        <EmptyState>
+          <h3>No hay productos disponibles</h3>
+          <p>No encontramos productos que coincidan con tu búsqueda</p>
+          <button 
+            className="btn btn-light"
+            onClick={() => {
+              setFilters(prev => ({
+                ...prev,
+                search: '',
+                category: '',
+                minPrice: '',
+                maxPrice: ''
+              }));
+            }}
+          >
+            Limpiar filtros
+          </button>
+        </EmptyState>
+      </Container>
     );
   }
 
   return (
-    <>
-      {getProductOrigin()}
-      
-      <div className="row g-4">
-        {products.map(product => (
-          <div key={product.id} className="col-md-6 col-lg-4 col-xl-3">
-            <div className="card h-100 shadow-sm">
-              <img 
-                src={product.avatar || product.image} 
-                className="card-img-top p-3" 
-                alt={product.name}
-                style={{ height: '200px', objectFit: 'contain' }}
-                onError={(e) => {
-                  e.target.src = `https://via.placeholder.com/300x200/667eea/ffffff?text=${encodeURIComponent(product.name)}`;
-                }}
-              />
-             <div className="card-body d-flex flex-column">
-               { /*   <div className="d-flex justify-content-between align-items-start mb-2">
-                  <span className="badge bg-secondary">{product.brand}</span>
-                  <span className="badge bg-warning text-dark">
-                    {product.rating} ⭐
-                  </span>
-                </div>*/}
-                
-                <h6 className="card-title">{product.name}</h6>
-                <p className="card-text text-muted small flex-grow-1">
-                  {product.description}
-                </p>
-                
-                {product.specs && (
-                  <div className="mb-3">
-                    <ul className="list-unstyled small text-muted">
-                      {Object.entries(product.specs).slice(0, 2).map(([key, value]) => (
-                        <li key={key}>
-                          <strong>{key}:</strong> {value}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                
-                <div className="mt-auto">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <span className="h5 text-primary mb-0">${product.price}</span>
-                    {product.inStock ? (
-                      <span className="badge bg-success">En Stock</span>
-                    ) : (
-                      <span className="badge bg-danger">Sin Stock</span>
-                    )}
-                  </div>
-                  <div className="d-flex gap-2">
-                    <button 
-                      className="btn btn-primary flex-grow-1"
-                      onClick={() => addToCart(product)}
-                      disabled={!product.inStock}
-                    >
-                      {product.inStock ? 'Agregar al Carrito' : 'Sin Stock'}
-                    </button>
-                    <Link 
-                      to={`/product/${product.category}/${product.id}`}
-                      className="btn btn-outline-primary"
-                    >
-                      Ver
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <Container>
+      <Header>
+        <Title>
+          Productos 
+          <span className="badge bg-primary ms-2">{totalItems}</span>
+        </Title>
+        
+        <Controls>
+          <div className="d-flex align-items-center gap-2">
+            <FaFilter />
+            <SortSelect value={filters.sortBy} onChange={handleSortChange}>
+              <option value="newest">Más recientes</option>
+              <option value="price_asc">
+                <FaSortAmountDown /> Precio: Menor a Mayor
+              </option>
+              <option value="price_desc">
+                <FaSortAmountUp /> Precio: Mayor a Menor
+              </option>
+              <option value="rating">Mejor valorados</option>
+            </SortSelect>
           </div>
+          
+          <ViewToggle>
+            <ViewButton 
+              active={viewMode === 'grid'}
+              onClick={() => setViewMode('grid')}
+              title="Vista de cuadrícula"
+            >
+              ▦
+            </ViewButton>
+            <ViewButton 
+              active={viewMode === 'list'}
+              onClick={() => setViewMode('list')}
+              title="Vista de lista"
+            >
+              ≡
+            </ViewButton>
+          </ViewToggle>
+        </Controls>
+      </Header>
+      
+      <Grid className={viewMode === 'list' ? 'list-view' : ''}>
+        {filteredProducts.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            viewMode={viewMode}
+            showAdminControls={isAdmin()}
+          />
         ))}
-      </div>
-    </>
+      </Grid>
+      
+      {pagination.totalPages > 1 && (
+        <Pagination
+          currentPage={pagination.page}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+          totalItems={totalItems}
+          itemsPerPage={pagination.limit}
+        />
+      )}
+    </Container>
   );
-};
+});
+
+ProductList.displayName = 'ProductList';
+export { ProductList };
 
 export default ProductList;

@@ -1,6 +1,6 @@
 // src/components/AdvancedFilters.jsx
 import { useState, useEffect } from 'react';
-import useCategories from '../hooks/useCategories222';
+import useCategories from '../hooks/useCategories';
 
 import styled from 'styled-components';
 

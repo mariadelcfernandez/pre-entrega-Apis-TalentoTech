@@ -1,156 +1,325 @@
 // src/pages/Home.jsx
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import useProducts from '../hooks/useProducts';
+import { useProducts } from '../contexts/ProductsContext';
+import ProductList from '../components/ProductList';
+import SearchBar from '../components/SearchBar';
 import styled from 'styled-components';
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../App.css';
-import products from '../pages/Products';
+import { 
+  FaShippingFast, 
+  FaShieldAlt, 
+  FaHeadset, 
+  FaTags,
+  FaFire,
+  FaStar
+} from 'react-icons/fa';
 
-
-const HeroSection = styled.section`
+const Hero = styled.section`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 100px 0;
+  padding: 6rem 0;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    background-size: cover;
+    background-position: bottom;
+  }
+`;
+
+const HeroContent = styled.div`
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
+const HeroTitle = styled.h1`
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+`;
+
+const HeroSubtitle = styled.p`
+  font-size: 1.3rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+`;
+
+const Features = styled.section`
+  padding: 5rem 0;
+  background: #f8f9fa;
+`;
+
+const FeatureGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
 `;
 
 const FeatureCard = styled.div`
-  border: none;
-  border-radius: 15px;
-  transition: transform 0.3s;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
   
   &:hover {
     transform: translateY(-10px);
   }
 `;
 
+const FeatureIcon = styled.div`
+  font-size: 3rem;
+  color: #667eea;
+  margin-bottom: 1rem;
+`;
+
+const FeaturedProducts = styled.section`
+  padding: 5rem 0;
+`;
+
+const SectionHeader = styled.div`
+  text-align: center;
+  margin-bottom: 3rem;
+  
+  h2 {
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+`;
+
 const Home = () => {
-  const { products } = useProducts();
-  const featuredProducts = products.slice(0, 3);
+  const { 
+    filteredProducts, 
+    setFilters,
+    fetchProducts,
+     } = useProducts();
+
+  
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+ 
+
+  useEffect(() => {
+    // Obtener productos destacados (nuevos y mejor valorados)
+    const featured = filteredProducts
+      .filter(p => p.isNew || p.rating >= 4)
+      .slice(0, 4);
+    
+    setFeaturedProducts(featured);
+  }, [filteredProducts]);
+
+  const handleSearch = (term) => {
+    setFilters(prev => ({
+      ...prev,
+      search: term,
+      page: 1
+    }));
+  };
 
   return (
-    <div>
-      {/* Hero Section */}
-      <HeroSection>
-        <div className="container">
-          <h1 className="display-4 fw-bold mb-4">
-            Bienvenido a MiTienda Informática
-          </h1>
-          <p className="lead mb-4">
-            Encuentra los mejores productos tecnológicos al mejor precio
-          </p>
-          {/* CORRECCIÓN: Agregar Link para navegar a productos */}
-          <Link to="/products" className="btn btn-light btn-lg">
-            Comprar Ahora
-          </Link>
-        </div>
-      </HeroSection>
+    <>
+      <Helmet>
+        <title>Tienda Tecnoya! | Los mejores productos al mejor precio</title>
+        <meta name="description" content="Bienvenido a nuestra tienda online. Encuentra productos de calidad con envío rápido y seguro." />
+        <meta name="keywords" content="tienda online, compras, productos, ofertas" />
+      </Helmet>
 
-      {/* Featured Products */}
-      <section className="py-5">
+      <Hero>
         <div className="container">
-          <h2 className="text-center mb-5">Productos Destacados</h2>
-          <div className="row g-4">
-            {featuredProducts.map(product => (
-              <div key={product.id} className="col-md-4">
-                <FeatureCard className="card h-100">
-                  <img 
-                    src={product.image} 
-                    className="card-img-top p-3" 
-                    alt={product.name || product.title}
-                    style={{ height: '200px', objectFit: 'contain' }}
-                    onError={(e) => {
-                      e.target.src = `https://via.placeholder.com/300x200/667eea/ffffff?text=${encodeURIComponent(product.name || product.title)}`;
-                    }}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{product.name || product.title}</h5>
-                    <p className="card-text text-muted">
-                      {(product.description || '').substring(0, 100)}...
-                    </p>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span className="h5 text-primary mb-0">${product.price}</span>
-                      {/* CORRECCIÓN: Link para detalles del producto */}
-                      <Link 
-                        to={`/product/${product.category}/${product.id}`}
-                        className="btn btn-primary w-100"
-                      >
-                        Ver Detalles
-                      </Link>                                            
+          <HeroContent>
+            <HeroTitle>Bienvenido a Tienda Online</HeroTitle>
+            <HeroSubtitle>
+              Descubre nuestra amplia selección de productos de alta calidad 
+              con los mejores precios y envío rápido a todo el país.
+            </HeroSubtitle>
+            
+            <div className="mb-4">
+              <SearchBar 
+                onSearch={handleSearch}
+                placeholder="¿Qué estás buscando hoy?"
+                showRecent={true}
+              />
+            </div>
+            
+            <div className="d-flex gap-3 justify-content-center flex-wrap">
+              <Link to="/productos" className="btn btn-light btn-lg px-4 py-2">
+                Ver Todos los Productos
+              </Link>
+              <Link to="/ofertas" className="btn btn-outline-light btn-lg px-4 py-2">
+                <FaFire className="me-2" />
+                Ofertas Especiales
+              </Link>
+            </div>
+          </HeroContent>
+        </div>
+      </Hero>
+
+      <Features>
+        <div className="container">
+          <SectionHeader>
+            <h2>¿Por qué elegirnos?</h2>
+            <p>Ofrecemos la mejor experiencia de compra online</p>
+          </SectionHeader>
+          
+          <FeatureGrid>
+            <FeatureCard>
+              <FeatureIcon>
+                <FaShippingFast />
+              </FeatureIcon>
+              <h4>Envío Rápido</h4>
+              <p className="text-muted">
+                Recibe tus productos en 24-48 horas en toda la ciudad
+              </p>
+            </FeatureCard>
+            
+            <FeatureCard>
+              <FeatureIcon>
+                <FaShieldAlt />
+              </FeatureIcon>
+              <h4>Compra Segura</h4>
+              <p className="text-muted">
+                Tus datos protegidos con encriptación SSL de 256 bits
+              </p>
+            </FeatureCard>
+            
+            <FeatureCard>
+              <FeatureIcon>
+                <FaHeadset />
+              </FeatureIcon>
+              <h4>Soporte 24/7</h4>
+              <p className="text-muted">
+                Atención al cliente disponible las 24 horas
+              </p>
+            </FeatureCard>
+            
+            <FeatureCard>
+              <FeatureIcon>
+                <FaTags />
+              </FeatureIcon>
+              <h4>Mejores Precios</h4>
+              <p className="text-muted">
+                Garantía del mejor precio o te devolvemos la diferencia
+              </p>
+            </FeatureCard>
+          </FeatureGrid>
+        </div>
+      </Features>
+
+      <FeaturedProducts>
+        <div className="container">
+          <SectionHeader>
+            <h2>Productos Destacados</h2>
+            <p>Los productos más populares y mejor valorados</p>
+          </SectionHeader>
+          
+          {featuredProducts.length > 0 ? (
+            <div className="row">
+              {featuredProducts.map(product => (
+                <div key={product.id} className="col-md-3 col-sm-6 mb-4">
+                  <div className="card h-100 border-0 shadow-sm">
+                    <div className="position-relative">
+                      <img 
+                        src={product.image || `https://picsum.photos/seed/${product.id}/300/200`}
+                        className="card-img-top"
+                        alt={product.name}
+                        style={{ height: '200px', objectFit: 'cover' }}
+                      />
+                      {product.isNew && (
+                        <span className="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 m-2 rounded">
+                          NUEVO
+                        </span>
+                      )}
+                      {product.rating >= 4.5 && (
+                        <span className="position-absolute top-0 end-0 bg-warning text-dark px-2 py-1 m-2 rounded">
+                          <FaStar className="me-1" /> TOP
+                        </span>
+                      )}
+                    </div>
+                    <div className="card-body">
+                      <h5 className="card-title">{product.name}</h5>
+                      <p className="card-text text-muted small">
+                        {product.description.substring(0, 60)}...
+                      </p>
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span className="h5 mb-0 text-primary">
+                          ${product.price.toFixed(2)}
+                        </span>
+                        <Link 
+                          to={`/producto/${product.id}`}
+                          className="btn btn-sm btn-outline-primary"
+                        >
+                          Ver Detalles
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </FeatureCard>
-              </div>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-5">
+              <p className="text-muted">Cargando productos destacados...</p>
+            </div>
+          )}
           
-          {/* Botón adicional para ver todos los productos */}
-          <div className="text-center mt-5">
-            <Link to="/products" className="btn btn-outline-primary btn-lg">
-              Ver Todos los Productos
+          <div className="text-center mt-4">
+            <Link to="/productos" className="btn btn-primary btn-lg">
+              Ver Más Productos
             </Link>
           </div>
         </div>
-      </section>
+      </FeaturedProducts>
 
-      {/* Sección de categorías */}
-      <section className="py-5 bg-light">
+      <section className="py-5 bg-dark text-white">
         <div className="container">
-          <h2 className="text-center mb-5">Nuestras Categorías</h2>
-          <div className="row g-4">
-            <div className="col-md-3">
-              <div className="card text-center">
-                <div className="card-body">
-                  <h3>💻</h3>
-                  <h5>Laptops</h5>
-                  <p className="text-muted">Encuentra la laptop perfecta</p>
-                  <Link to="/products?category=laptops" className="btn btn-outline-primary">
-                    Explorar
-                  </Link>
-                </div>
-              </div>
+          <div className="row align-items-center">
+            <div className="col-md-6">
+              <h2>Suscríbete a nuestro newsletter</h2>
+              <p className="lead">
+                Recibe ofertas exclusivas y novedades directamente en tu correo
+              </p>
             </div>
-            <div className="col-md-3">
-              <div className="card text-center">
-                <div className="card-body">
-                  <h3>🖥️</h3>
-                  <h5>Monitores</h5>
-                  <p className="text-muted">Mejora tu espacio de trabajo</p>
-                  <Link to="/products?category=monitores" className="btn btn-outline-primary">
-                    Explorar
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card text-center">
-                <div className="card-body">
-                  <h3>⌨️</h3>
-                  <h5>Periféricos</h5>
-                  <p className="text-muted">Teclados, mouse y más</p>
-                  <Link to="/products?category=perifericos" className="btn btn-outline-primary">
-                    Explorar
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card text-center">
-                <div className="card-body">
-                  <h3>🔧</h3>
-                  <h5>Componentes</h5>
-                  <p className="text-muted">Arma tu PC ideal</p>
-                  <Link to="/products?category=componentes" className="btn btn-outline-primary">
-                    Explorar
-                  </Link>
-                </div>
-              </div>
+            <div className="col-md-6">
+              <form className="d-flex gap-2">
+                <input 
+                  type="email" 
+                  className="form-control form-control-lg" 
+                  placeholder="Tu correo electrónico" 
+                  required 
+                />
+                <button type="submit" className="btn btn-primary btn-lg">
+                  Suscribirse
+                </button>
+              </form>
             </div>
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

@@ -1,109 +1,76 @@
 // src/pages/Login.jsx
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+import LoginForm from '../components/forms/LoginForm';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
+const LoginContainer = styled.div`
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+`;
+
+const LoginCard = styled.div`
+  background: white;
+  border-radius: 15px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+`;
+
+const LoginHeader = styled.div`
+  text-align: center;
+  margin-bottom: 2rem;
+  
+  h1 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  
+  p {
+    color: #666;
+  }
+`;
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-  
-    /* 
-     const result = await login(email , password );
-    if (result.success) {
-      navigate('/');
-    } else {
-      setError(result.message);
-    }
-    setLoading(false);*/
-     if (email === 'talento@example.com' && password === '123456') {
-     login({
-        id: 1,
-        name: 'Talento',
-        email: email
-      });
-       navigate('/');
-    } else {
-      setError('Credenciales incorrectas. Usa: demo@example.com / password');
-    }
-  };
-   
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-4">
-          <div className="card shadow">
-            <div className="card-body">
-              <h2 className="card-title text-center mb-4">Iniciar Sesión</h2>
-              
-              {error && (
-                <div className="alert alert-danger" role="alert">
-                  {error}
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Contraseña</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <button 
-                  type="submit" 
-                  className="btn btn-primary w-100" 
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                      Iniciando sesión...
-                    </>
-                  ) : (
-                    'Iniciar Sesión'
-                  )}
-                </button>
-              </form>
-
-              <div className="text-center mt-3">
-                <p className="mb-0">
-                  ¿No tienes cuenta?{' '}
-                  <Link to="/register" className="text-decoration-none">
-                    Regístrate aquí
-                  </Link>
-                </p>
-              </div>
-            </div>
+    <>
+      <Helmet>
+        <title>Iniciar Sesión | Tienda Online</title>
+        <meta name="description" content="Inicia sesión en tu cuenta para continuar con tus compras" />
+      </Helmet>
+      
+      <LoginContainer>
+        <LoginCard>
+          <LoginHeader>
+            <h1>Iniciar Sesión</h1>
+            <p>Accede a tu cuenta para continuar</p>
+          </LoginHeader>
+          
+          <LoginForm />
+          
+          <div className="text-center mt-4">
+            <p className="text-muted">
+              ¿No tienes una cuenta?{' '}
+              <Link to="/register" className="text-decoration-none fw-bold text-primary">
+                Regístrate aquí
+              </Link>
+            </p>
+            <p className="text-muted">
+              <Link to="/forgot-password" className="text-decoration-none">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </p>
           </div>
-        </div>
-      </div>
-    </div>
+        </LoginCard>
+      </LoginContainer>
+    </>
   );
 };
 
